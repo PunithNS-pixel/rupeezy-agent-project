@@ -1,0 +1,11 @@
+{
+  "name": "rupeezy-agent-project",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "test": "node test/analyzer.test.js"
+  }
+}

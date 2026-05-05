@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rupeezy · AP Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #000;
+  --fg: #e8e4d4;
+  --fg-dim: #666;
+  --fg-muted: #333;
+  --accent: #fff;
+  --border: #1a1a1a;
+  --border-mid: #222;
+  --green: #00ff88;
+  --red: #ff4444;
+  --amber: #ffaa00;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-display: 'Space Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--fg-muted); }
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  border-bottom: 1px solid var(--border-mid);
+  position: sticky;
+  top: 0;
+  background: rgba(0,0,0,0.96);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -1px;
+  color: var(--accent);
+  text-decoration: none;
+}
+.nav-logo .badge {
+  display: inline-block;
+  background: var(--fg-muted);
+  color: #888;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  margin-left: 8px;
+  letter-spacing: 2px;
+  vertical-align: middle;
+}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--fg-dim);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-cta {
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  cursor: pointer;
+  border: 1px solid var(--border-mid);
+  background: none;
+  color: var(--fg-dim);
+  transition: all 0.18s;
+}
+.btn:hover { border-color: var(--fg-dim); color: var(--fg); }
+.btn.primary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn.primary:hover { background: var(--accent); color: var(--bg); }
+.btn.solid {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+.btn.solid:hover { background: var(--fg); border-color: var(--fg); }
+
+/* ── HERO ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 65px);
+  border-bottom: 1px solid var(--border-mid);
+}
+.hero-left {
+  padding: 80px 48px;
+  border-right: 1px solid var(--border-mid);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.section-num {
+  font-family: var(--font-display);
+  font-size: 130px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--fg-muted);
+  margin-bottom: 40px;
+  letter-spacing: -8px;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+.hero-tagline {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 20px;
+  animation: fadeUp 0.5s ease 0.15s both;
+}
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--fg);
+  max-width: 440px;
+  margin-bottom: 44px;
+  animation: fadeUp 0.5s ease 0.25s both;
+}
+.hero-headline strong { color: var(--accent); font-weight: 700; }
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  animation: fadeUp 0.5s ease 0.35s both;
+}
+
+.hero-right {
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+
+/* ── TERMINAL ── */
+.terminal {
+  border: 1px solid var(--border-mid);
+  background: #030303;
+  font-size: 12px;
+  line-height: 1.75;
+}
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-mid);
+  background: #080808;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #2a2a2a; }
+.terminal-title {
+  font-size: 10px;
+  color: var(--fg-dim);
+  margin-left: auto;
+  letter-spacing: 1px;
+}
+.terminal-body { padding: 20px 24px; }
+.t-line { margin-bottom: 3px; white-space: pre-wrap; word-break: break-all; }
+.t-blank { height: 10px; }
+.t-prompt { color: var(--fg-muted); }
+.t-cmd { color: var(--fg); }
+.t-out { color: var(--fg-dim); }
+.t-green { color: var(--green); }
+.t-amber { color: var(--amber); }
+.t-red { color: var(--red); }
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: var(--fg);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border-mid);
+}
+.stat-cell {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border-mid);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 10px;
+  color: var(--fg-dim);
+  letter-spacing: 1px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ── LIVE DEMO ── */
+.demo-shell {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  border-top: 1px solid var(--border-mid);
+  margin-top: 40px;
+}
+.demo-left,
+.demo-right {
+  padding: 34px 48px;
+}
+.demo-left {
+  border-right: 1px solid var(--border-mid);
+}
+.demo-kicker {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 14px;
+}
+.demo-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.demo-copy {
+  color: var(--fg-dim);
+  font-size: 12px;
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+.demo-input {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  padding: 16px 18px;
+  border: 1px solid var(--border-mid);
+  background: #050505;
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  outline: none;
+}
+.demo-input:focus {
+  border-color: var(--fg-dim);
+}
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.demo-note {
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--fg-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.demo-metric {
+  border: 1px solid var(--border-mid);
+  background: #040404;
+  padding: 14px 16px;
+}
+.demo-metric-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+.demo-metric-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: var(--accent);
+  margin-top: 8px;
+}
+.demo-metric-sub {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+.demo-log {
+  margin-top: 12px;
+  border: 1px solid var(--border-mid);
+  background: #040404;
+  padding: 18px;
+  min-height: 250px;
+}
+.demo-log-line {
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+}
+.demo-log-muted { color: var(--fg-dim); }
+.demo-log-good { color: var(--green); }
+.demo-log-warn { color: var(--amber); }
+.demo-log-bad { color: var(--red); }
+.demo-log-title {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 12px;
+}
+.demo-transcript {
+  margin-top: 10px;
+  border-top: 1px solid var(--border-mid);
+  padding-top: 12px;
+}
+.demo-transcript .demo-log-line {
+  color: var(--fg-dim);
+}
+
+/* ── SECTIONS ── */
+.section { border-bottom: 1px solid var(--border-mid); }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  padding: 48px 48px 0;
+}
+.section-n {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--fg-muted);
+  letter-spacing: -4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  border-bottom: 1px solid var(--fg-muted);
+  padding-bottom: 4px;
+  width: 100%;
+}
+
+/* ── FAILURES ── */
+.failures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border-mid);
+  margin-top: 40px;
+}
+.failure-card {
+  padding: 36px 48px;
+  border-right: 1px solid var(--border-mid);
+}
+.failure-card:last-child { border-right: none; }
+.failure-type {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.failure-pct {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: -3px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.failure-label {
+  font-size: 13px;
+  color: var(--fg);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.failure-desc { font-size: 12px; color: var(--fg-dim); line-height: 1.8; }
+
+/* ── PIPELINE ── */
+.pipeline-wrap { padding: 40px 48px; border-top: 1px solid var(--border-mid); margin-top: 40px; }
+.pipeline-flow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--border-mid);
+  margin-bottom: 40px;
+}
+.pipe-stage {
+  padding: 24px 16px;
+  text-align: center;
+  border-right: 1px solid var(--border-mid);
+  position: relative;
+}
+.pipe-stage:last-child { border-right: none; }
+.pipe-num {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  color: var(--fg);
+}
+.pipe-lbl {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-top: 8px;
+}
+.pipe-arrow {
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  background: var(--bg);
+  border-right: 1px solid var(--border-mid);
+  border-top: 1px solid var(--border-mid);
+  transform: translateY(-50%) rotate(45deg);
+  z-index: 2;
+}
+
+/* leads table */
+.leads-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  border: 1px solid var(--border-mid);
+}
+.leads-table th {
+  text-align: left;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-mid);
+  font-weight: 400;
+  background: #050505;
+}
+.leads-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg);
+  vertical-align: middle;
+}
+.leads-table tr:last-child td { border-bottom: none; }
+.leads-table tbody tr { transition: background 0.15s; }
+.leads-table tbody tr:hover td { background: #0a0a0a; }
+
+.tag {
+  display: inline-block;
+  background: #111;
+  color: var(--fg-dim);
+  font-size: 9px;
+  padding: 3px 8px;
+  margin-right: 4px;
+  letter-spacing: 1px;
+  border: 1px solid var(--border-mid);
+}
+.badge-pill {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid;
+  font-weight: 700;
+}
+.badge-pill.hot { border-color: var(--red); color: var(--red); }
+.badge-pill.warm { border-color: var(--amber); color: var(--amber); }
+.badge-pill.cold { border-color: var(--fg-muted); color: var(--fg-muted); }
+
+.score-hot { color: var(--red); font-weight: 700; }
+.score-warm { color: var(--amber); font-weight: 700; }
+.score-cold { color: var(--fg-muted); }
+
+/* ── ARCHITECTURE ── */
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border-mid);
+  margin-top: 40px;
+}
+.arch-left {
+  padding: 40px 48px;
+  border-right: 1px solid var(--border-mid);
+}
+.arch-right { padding: 40px 48px; }
+
+.arch-table { width: 100%; border-collapse: collapse; }
+.arch-table tr { border-bottom: 1px solid var(--border); }
+.arch-table tr:last-child { border-bottom: none; }
+.arch-table td { padding: 13px 0; vertical-align: top; }
+.arch-key {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  padding-right: 24px;
+  width: 110px;
+}
+.arch-val { font-size: 12px; }
+.tag.green { background: #001508; color: var(--green); border-color: #003018; }
+.tag.amber { background: #120a00; color: var(--amber); border-color: #2a1800; }
+.tag.white { background: #0a0a0a; color: var(--fg); border-color: var(--border-mid); }
+
+/* scoring bars */
+.score-section-title {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 24px;
+}
+.score-row { margin-bottom: 18px; }
+.score-row-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.score-name { font-size: 12px; color: var(--fg-dim); }
+.score-pts { font-size: 12px; color: var(--fg); }
+.score-bar { height: 1px; background: var(--border-mid); position: relative; }
+.score-fill { height: 1px; background: var(--accent); transition: width 1s ease; }
+
+.threshold-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border-mid);
+  margin-top: 32px;
+}
+.thresh-cell {
+  padding: 20px;
+  text-align: center;
+  border-right: 1px solid var(--border-mid);
+}
+.thresh-cell:last-child { border-right: none; }
+.thresh-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+.thresh-lbl {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-top: 6px;
+}
+
+/* ── HANDOFF ── */
+.handoff-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border-mid);
+  margin-top: 40px;
+}
+.handoff-card {
+  padding: 36px 48px;
+  border-right: 1px solid var(--border-mid);
+}
+.handoff-card:last-child { border-right: none; }
+.handoff-type {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.handoff-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+.handoff-desc { font-size: 12px; color: var(--fg-dim); line-height: 1.9; }
+.handoff-tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-mid);
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+
+/* ── SECTION 06: RISKS ── */
+.risks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--border-mid);
+  margin-top: 40px;
+}
+.risk-card {
+  padding: 32px 48px;
+  border-right: 1px solid var(--border-mid);
+  border-bottom: 1px solid var(--border-mid);
+}
+.risk-card:nth-child(2n) { border-right: none; }
+.risk-card:nth-child(3), .risk-card:nth-child(4) { border-bottom: none; }
+.risk-id {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.risk-title {
+  font-size: 14px;
+  color: var(--fg);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.risk-desc { font-size: 12px; color: var(--fg-dim); line-height: 1.8; }
+.risk-mitigation {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--green);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.risk-mitigation::before {
+  content: '→';
+  flex-shrink: 0;
+}
+
+/* ── APPENDIX A ── */
+.appendix-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--border-mid);
+  margin-top: 40px;
+}
+.appendix-card {
+  padding: 32px 48px;
+  border-right: 1px solid var(--border-mid);
+  border-bottom: 1px solid var(--border-mid);
+}
+.appendix-card:nth-child(2n) { border-right: none; }
+.appendix-card:nth-child(3), .appendix-card:nth-child(4) { border-bottom: none; }
+.appendix-type {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 12px;
+}
+.appendix-title {
+  font-size: 14px;
+  color: var(--fg);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.appendix-text,
+.appendix-list {
+  font-size: 12px;
+  color: var(--fg-dim);
+  line-height: 1.8;
+}
+.appendix-list {
+  list-style: none;
+  margin-top: 12px;
+}
+.appendix-list li {
+  margin-bottom: 8px;
+  padding-left: 14px;
+  position: relative;
+}
+.appendix-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--fg-muted);
+}
+
+/* ── FOOTER ── */
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 48px;
+  border-top: 1px solid var(--border-mid);
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+}
+.footer-copy { font-size: 10px; color: var(--fg-muted); letter-spacing: 1px; }
+.footer-ver { font-size: 10px; color: var(--fg-muted); letter-spacing: 1px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 1100px) {
+  .hero,
+  .demo-shell,
+  .arch-grid,
+  .handoff-grid,
+  .risks-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-left,
+  .demo-left,
+  .demo-right,
+  .arch-left,
+  .arch-right {
+    border-right: none;
+  }
+  .failures-grid,
+  .threshold-grid,
+  .stats-strip,
+  .handoff-grid,
+  .risks-grid {
+    grid-template-columns: 1fr;
+  }
+  .pipeline-flow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .nav-links {
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 720px) {
+  nav,
+  footer,
+  .section-header,
+  .hero-left,
+  .hero-right,
+  .demo-left,
+  .demo-right,
+  .pipeline-wrap,
+  .arch-left,
+  .arch-right,
+  .failure-card,
+  .handoff-card,
+  .risk-card {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .nav-cta,
+  .hero-actions,
+  .demo-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .demo-grid {
+    grid-template-columns: 1fr;
+  }
+  .pipeline-flow {
+    grid-template-columns: 1fr;
+  }
+  .pipeline-wrap {
+    padding-top: 28px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Rupeezy<span class="badge">AP AGENT</span></a>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#handoff">Handoff</a></li>
+    <li><a href="#risks">Risks</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn">Docs</button>
+    <button class="btn primary">Launch Agent</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-left">
+    <div class="section-num">01</div>
+    <div class="hero-tagline">// AI Voice Agent — Partner Lead Conversion</div>
+    <p class="hero-headline">
+      An AI voice agent that calls your partner leads <strong>immediately</strong>, in their language, handles objections naturally, and hands off only the <strong>hot ones</strong> to your RMs — lifting conversion from <strong>18% toward 40%+.</strong>
+    </p>
+    <div class="hero-actions">
+      <button class="btn solid" id="jumpToDemo">View Demo</button>
+      <button class="btn">Read Docs</button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span class="terminal-title">agent.session — lead_0047</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">rupeezy-agent --lead 0047 --lang auto</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-out">Detecting language preference...</span></div>
+        <div class="t-line"><span class="t-green">✓ Hindi detected (confidence: 0.94)</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-out">Initiating call...</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-prompt">AGENT  </span><span class="t-cmd">Namaste! Kya main Rajesh bhai se baat kar sakta hoon?</span></div>
+        <div class="t-line"><span class="t-prompt">LEAD   </span><span class="t-out">Haan, main hi hoon. Kaun bol rahe ho?</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-prompt">AGENT  </span><span class="t-cmd">Rupeezy se call hai — 100% brokerage share ke baare mein...</span></div>
+        <div class="t-line"><span class="t-prompt">LEAD   </span><span class="t-out">Main already ek aur broker ke saath hoon.</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-amber">⚡ Objection: already_with_broker → rebuttal loaded</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-prompt">AGENT  </span><span class="t-cmd">Perfect! Toh aap business samajhte ho. Kya woh daily payout deta hai?</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-out">Scoring... engagement: 78 | objections_cleared: 1</span></div>
+        <div class="t-line"><span class="t-green">✓ Lead classified: HOT — queued for RM handoff</span></div>
+        <div class="t-blank"></div>
+        <div class="t-line"><span class="t-prompt">$ </span><span class="cursor"></span></div>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-cell">
+        <div class="stat-num">9×</div>
+        <div class="stat-label">Higher conversion<br>within 5 min contact</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Brokerage share<br>vs 60–70% industry</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">40%+</div>
+        <div class="stat-label">Target conversion<br>rate (from 18%)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 02: LIVE DEMO -->
+<section class="section reveal" id="demo">
+  <div class="section-header">
+    <div class="section-n">02</div>
+    <div class="section-title">Live Demo — Backend-Powered Call Analysis</div>
+  </div>
+  <div class="demo-shell">
+    <div class="demo-left">
+      <div class="demo-kicker">// input stream</div>
+      <div class="demo-title">Drop in a lead statement and the backend will score it, classify it, and generate the next move.</div>
+      <div class="demo-copy">Use this panel to prove the full loop: text in, language and objection detection, scoring, and a human-style response that would be spoken by the agent.</div>
+      <textarea class="demo-input" id="leadInput">I already work with another broker, but if the payout is better I can switch.</textarea>
+      <div class="demo-actions">
+        <button class="btn solid" id="runAnalysis">Run Analysis</button>
+        <button class="btn" id="micButton">Use Mic</button>
+        <button class="btn" id="speakButton">Speak Result</button>
+      </div>
+      <div class="demo-note" id="backendState">Backend: not queried yet</div>
+    </div>
+    <div class="demo-right">
+      <div class="demo-grid">
+        <div class="demo-metric">
+          <div class="demo-metric-label">Language</div>
+          <div class="demo-metric-value" id="languageValue">—</div>
+          <div class="demo-metric-sub" id="languageSub">Detected from the lead text.</div>
+        </div>
+        <div class="demo-metric">
+          <div class="demo-metric-label">Score</div>
+          <div class="demo-metric-value" id="scoreValue">—</div>
+          <div class="demo-metric-sub" id="scoreSub">Qualification out of 100 points.</div>
+        </div>
+        <div class="demo-metric">
+          <div class="demo-metric-label">Classification</div>
+          <div class="demo-metric-value" id="classValue">—</div>
+          <div class="demo-metric-sub" id="classSub">Hot, warm, or cold.</div>
+        </div>
+        <div class="demo-metric">
+          <div class="demo-metric-label">Next Action</div>
+          <div class="demo-metric-value" id="actionValue">—</div>
+          <div class="demo-metric-sub" id="actionSub">RM queue, WhatsApp, or nurture.</div>
+        </div>
+      </div>
+      <div class="demo-log">
+        <div class="demo-log-title">Backend trace</div>
+        <div id="analysisLog">
+          <div class="demo-log-line demo-log-muted">Awaiting lead input.</div>
+        </div>
+        <div class="demo-transcript" id="transcriptLog"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 03: FAILURES -->
+<section class="section reveal" id="failures">
+  <div class="section-header">
+    <div class="section-n">03</div>
+    <div class="section-title">Structural Failures in RM-Driven Conversion</div>
+  </div>
+  <div class="failures-grid">
+    <div class="failure-card">
+      <div class="failure-type">// timing</div>
+      <div class="failure-pct">82%</div>
+      <div class="failure-label">Leads go cold before first call</div>
+      <div class="failure-desc">Weekend campaigns generate 50+ leads overnight. They sit untouched until Monday morning. Industry data shows a 9× drop in conversion beyond 5 minutes — Rupeezy's default is hours or days.</div>
+    </div>
+    <div class="failure-card">
+      <div class="failure-type">// language</div>
+      <div class="failure-pct">20+</div>
+      <div class="failure-label">Major Indian languages unserved</div>
+      <div class="failure-desc">RMs speak 1–2 languages. A Hindi-speaking lead who receives a formal English pitch disconnects in 15 seconds. The AP program's addressable market is far larger than the RM team can reach.</div>
+    </div>
+    <div class="failure-card">
+      <div class="failure-type">// capacity</div>
+      <div class="failure-pct">1:1</div>
+      <div class="failure-label">One RM, one call, one queue</div>
+      <div class="failure-desc">A campaign generating hundreds of leads overnight fills a multi-day queue. By the time the RM reaches lead #200, the lead has forgotten they even expressed interest.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 04: PIPELINE -->
+<section class="section reveal" id="pipeline">
+  <div class="section-header">
+    <div class="section-n">04</div>
+    <div class="section-title">Lead Pipeline — Contacted → Qualified → Handed Off</div>
+  </div>
+  <div class="pipeline-wrap">
+    <div class="pipeline-flow">
+      <div class="pipe-stage">
+        <div class="pipe-num">50</div>
+        <div class="pipe-lbl">Leads In</div>
+        <div class="pipe-arrow"></div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-num">50</div>
+        <div class="pipe-lbl">Contacted</div>
+        <div class="pipe-arrow"></div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-num">38</div>
+        <div class="pipe-lbl">Engaged</div>
+        <div class="pipe-arrow"></div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-num">22</div>
+        <div class="pipe-lbl">Qualified</div>
+        <div class="pipe-arrow"></div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-num score-hot">8</div>
+        <div class="pipe-lbl">Hot → RM</div>
+      </div>
+    </div>
+
+    <table class="leads-table">
+      <thead>
+        <tr>
+          <th>Lead ID</th>
+          <th>Name</th>
+          <th>Language</th>
+          <th>Duration</th>
+          <th>Objections</th>
+          <th>Score</th>
+          <th>Classification</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--fg-muted)">#0047</td>
+          <td>Rajesh Sharma</td>
+          <td><span class="tag white">Hindi</span></td>
+          <td>4m 32s</td>
+          <td>already_with_broker</td>
+          <td class="score-hot">78</td>
+          <td><span class="badge-pill hot">Hot</span></td>
+          <td style="color:var(--green); font-size:11px">RM Queue →</td>
+        </tr>
+        <tr>
+          <td style="color:var(--fg-muted)">#0048</td>
+          <td>Meena Patel</td>
+          <td><span class="tag white">Gujarati</span></td>
+          <td>3m 11s</td>
+          <td>trust, think_about_it</td>
+          <td class="score-warm">52</td>
+          <td><span class="badge-pill warm">Warm</span></td>
+          <td style="color:var(--amber); font-size:11px">WhatsApp →</td>
+        </tr>
+        <tr>
+          <td style="color:var(--fg-muted)">#0049</td>
+          <td>Arjun Nair</td>
+          <td><span class="tag white">English</span></td>
+          <td>1m 47s</td>
+          <td>no_contacts</td>
+          <td class="score-cold">21</td>
+          <td><span class="badge-pill cold">Cold</span></td>
+          <td style="color:var(--fg-muted); font-size:11px">Nurture +14d</td>
+        </tr>
+        <tr>
+          <td style="color:var(--fg-muted)">#0050</td>
+          <td>Priya Rajan</td>
+          <td><span class="tag white">Hinglish</span></td>
+          <td>5m 08s</td>
+          <td>—</td>
+          <td class="score-hot">91</td>
+          <td><span class="badge-pill hot">Hot</span></td>
+          <td style="color:var(--green); font-size:11px">RM Queue →</td>
+        </tr>
+        <tr>
+          <td style="color:var(--fg-muted)">#0051</td>
+          <td>Santhosh Kumar</td>
+          <td><span class="tag white">Tamil</span></td>
+          <td>2m 55s</td>
+          <td>support_issues</td>
+          <td class="score-warm">44</td>
+          <td><span class="badge-pill warm">Warm</span></td>
+          <td style="color:var(--amber); font-size:11px">WhatsApp →</td>
+        </tr>
+        <tr>
+          <td style="color:var(--fg-muted)">#0052</td>
+          <td>Farida Sheikh</td>
+          <td><span class="tag white">Marathi</span></td>
+          <td>0m 52s</td>
+          <td>call_me_later</td>
+          <td class="score-cold">18</td>
+          <td><span class="badge-pill cold">Cold</span></td>
+          <td style="color:var(--fg-muted); font-size:11px">Nurture +14d</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 05: ARCHITECTURE -->
+<section class="section reveal" id="architecture">
+  <div class="section-header">
+    <div class="section-n">05</div>
+    <div class="section-title">Architecture — Technology & Model Choices</div>
+  </div>
+  <div class="arch-grid">
+    <div class="arch-left">
+      <table class="arch-table">
+        <tr>
+          <td class="arch-key">Voice I/O</td>
+          <td class="arch-val">
+            <span class="tag green">Web Speech API</span>
+            <span class="tag green">WebRTC</span>
+            <span class="tag">Twilio fallback</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">STT</td>
+          <td class="arch-val">
+            <span class="tag green">Whisper v3</span>
+            <span class="tag">Deepgram Nova-2</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">LLM</td>
+          <td class="arch-val">
+            <span class="tag green">Claude Sonnet 4</span>
+            <span class="tag amber">GPT-4o backup</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">TTS</td>
+          <td class="arch-val">
+            <span class="tag green">ElevenLabs</span>
+            <span class="tag">Azure Neural TTS</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">Lang detect</td>
+          <td class="arch-val">
+            <span class="tag green">IndicLID</span>
+            <span class="tag">Whisper auto</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">Backend</td>
+          <td class="arch-val">
+            <span class="tag green">FastAPI</span>
+            <span class="tag white">Redis</span>
+            <span class="tag white">PostgreSQL</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">Knowledge</td>
+          <td class="arch-val">
+            <span class="tag white">Appendix A RAG</span>
+            <span class="tag white">Pinecone</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">Messaging</td>
+          <td class="arch-val">
+            <span class="tag white">WhatsApp Business API</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">Analytics</td>
+          <td class="arch-val">
+            <span class="tag white">Metabase</span>
+            <span class="tag white">Webhook → CRM</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="arch-key">Memory</td>
+          <td class="arch-val">
+            <span class="tag green">Redis session store</span>
+            <span class="tag white">Multi-turn context</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="arch-right">
+      <div class="score-section-title">// Qualification Scoring Model — 100 pts total</div>
+
+      <div class="score-row">
+        <div class="score-row-head">
+          <span class="score-name">Verbal intent signals</span>
+          <span class="score-pts">35 pts</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" style="width:35%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-head">
+          <span class="score-name">Engagement duration</span>
+          <span class="score-pts">25 pts</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" style="width:25%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-head">
+          <span class="score-name">Objection resolution rate</span>
+          <span class="score-pts">20 pts</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" style="width:20%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-head">
+          <span class="score-name">Network size (stated)</span>
+          <span class="score-pts">15 pts</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" style="width:15%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-head">
+          <span class="score-name">Prior broker experience</span>
+          <span class="score-pts">5 pts</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" style="width:5%"></div></div>
+      </div>
+
+      <div class="threshold-grid">
+        <div class="thresh-cell">
+          <div class="thresh-val score-hot">70+</div>
+          <div class="thresh-lbl">Hot → RM</div>
+        </div>
+        <div class="thresh-cell">
+          <div class="thresh-val score-warm">40–69</div>
+          <div class="thresh-lbl">Warm → WA</div>
+        </div>
+        <div class="thresh-cell">
+          <div class="thresh-val score-cold">&lt;40</div>
+          <div class="thresh-lbl">Cold → Nurture</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 06: HANDOFF -->
+<section class="section reveal" id="handoff">
+  <div class="section-header">
+    <div class="section-n">06</div>
+    <div class="section-title">Handoff Design — Hot, Warm & Cold</div>
+  </div>
+  <div class="handoff-grid">
+    <div class="handoff-card">
+      <div class="handoff-type">// score ≥ 70 · hot leads</div>
+      <div class="handoff-title">RM Handoff</div>
+      <div class="handoff-desc">Full conversation context delivered to the RM dashboard before they pick up the phone — transcript, objections raised, objections cleared, interest score, stated network size, and a recommended next step. The RM walks in informed, not blind.</div>
+      <div class="handoff-tag">Instant queue</div>
+    </div>
+    <div class="handoff-card">
+      <div class="handoff-type">// score 40–69 · warm leads</div>
+      <div class="handoff-title">WhatsApp Fallback</div>
+      <div class="handoff-desc">Auto-send personalised WhatsApp message with RISE Portal sign-up link immediately post-call. The message references what was actually discussed — not a generic blast. Warm leads are nudged, not forgotten.</div>
+      <div class="handoff-tag">Auto-send post-call</div>
+    </div>
+    <div class="handoff-card">
+      <div class="handoff-type">// score &lt; 40 · cold leads</div>
+      <div class="handoff-title">Nurture Queue</div>
+      <div class="handoff-desc">Logged with full call summary. Re-queued for agent re-engagement after 14 days. Multi-turn memory ensures the agent remembers prior call context — no repeated openers, no wasted seconds re-pitching what was already heard.</div>
+      <div class="handoff-tag">Re-engage +14 days</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 07: RISKS -->
+<section class="section reveal" id="risks">
+  <div class="section-header">
+    <div class="section-n">07</div>
+    <div class="section-title">Risks, Trade-offs & Mitigations</div>
+  </div>
+  <div class="risks-grid">
+    <div class="risk-card">
+      <div class="risk-id">// risk-01 · latency</div>
+      <div class="risk-title">Voice Round-Trip Latency</div>
+      <div class="risk-desc">STT → LLM → TTS pipeline introduces 1–3 seconds of latency per turn. In voice conversations, this reads as unnatural silence and kills trust.</div>
+      <div class="risk-mitigation">Streaming TTS output while LLM generates. Filler acknowledgement tokens ("Haan, samajh gaya...") bridge the gap. Target &lt;800ms perceived latency.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-id">// risk-02 · code-mixing</div>
+      <div class="risk-title">Hinglish & Code-Mixing Detection</div>
+      <div class="risk-desc">Indian speakers naturally mix Hindi, English, and regional variants mid-sentence. Binary language detection fails on code-mixed speech — the model either responds in the wrong register or breaks entirely.</div>
+      <div class="risk-mitigation">IndicLID runs at the sentence level, not call level. The LLM prompt instructs it to mirror the lead's exact code-mixing pattern rather than normalise to a single language.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-id">// risk-03 · hallucination</div>
+      <div class="risk-title">LLM Hallucinating Product Facts</div>
+      <div class="risk-desc">The agent pitching incorrect brokerage percentages, wrong payout timelines, or fabricated eligibility criteria would create compliance exposure and destroy credibility.</div>
+      <div class="risk-mitigation">All product claims are RAG-grounded from Appendix A. The system prompt instructs the LLM to refuse to answer product questions not present in the knowledge base.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-id">// risk-04 · consent</div>
+      <div class="risk-title">TRAI & Consent Compliance</div>
+      <div class="risk-desc">Outbound AI voice calls to unconsented leads may violate TRAI's TCCCPR regulations. Regulatory exposure is material if the agent contacts numbers on the DND registry.</div>
+      <div class="risk-mitigation">Lead ingestion pipeline scrubs against NDNC registry before agent dispatch. Agent opens with an explicit AI disclosure. All calls are recorded and stored with consent timestamps.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 08: APPENDIX A -->
+<section class="section reveal" id="appendix-a">
+  <div class="section-header">
+    <div class="section-n">08</div>
+    <div class="section-title">Appendix A — Telecalling Script & FAQ Base Knowledge</div>
+  </div>
+  <div class="appendix-grid">
+    <div class="appendix-card">
+      <div class="appendix-type">// opening</div>
+      <div class="appendix-title">Call opening</div>
+      <div class="appendix-text">Open fast, identify Rupeezy, and ask for a short window of attention before moving into the purpose of the call.</div>
+      <ul class="appendix-list">
+        <li>Hindi opening: Namaste, Rupeezy se bol raha hoon. Kya main aapke 30 seconds le sakta hoon?</li>
+        <li>English opening: Hi, this is Rupeezy. Can I take 30 seconds to explain why I am calling?</li>
+        <li>Gujarati opening: Kem cho, hu Rupeezy mathi bolu chhu. Ek minute batavo?</li>
+        <li>Tamil opening: Vanakkam, naan Rupeezy-ilirundhu pesuren. Oru nimidam kuduthaalaam?</li>
+        <li>Marathi opening: Namaskar, mi Rupeezy kadun bolat ahe. 30 second milu shakta ka?</li>
+        <li>Hinglish opening: Namaste, Rupeezy se — quick 30 seconds?</li>
+      </ul>
+    </div>
+    <div class="appendix-card">
+      <div class="appendix-type">// benefits</div>
+      <div class="appendix-title">Key benefits</div>
+      <ul class="appendix-list">
+        <li>100% brokerage share for eligible partners.</li>
+        <li>Fast payout and a simple partner onboarding flow.</li>
+        <li>RM support for qualified hot leads.</li>
+        <li>Language-friendly follow-up across Hindi, Gujarati, Tamil, Marathi, Hinglish, and English.</li>
+      </ul>
+    </div>
+    <div class="appendix-card">
+      <div class="appendix-type">// eligibility + start</div>
+      <div class="appendix-title">Eligibility and getting started</div>
+      <ul class="appendix-list">
+        <li>Confirm market interest or referral potential.</li>
+        <li>Capture the lead's main objection or need.</li>
+        <li>Route hot leads to RM, warm leads to WhatsApp, and cold leads to nurture.</li>
+      </ul>
+    </div>
+    <div class="appendix-card">
+      <div class="appendix-type">// objections + faq</div>
+      <div class="appendix-title">Five objections the agent must handle</div>
+      <ul class="appendix-list">
+        <li>Already with another broker.</li>
+        <li>Call me later / busy right now.</li>
+        <li>Trust / safety concerns.</li>
+        <li>Pricing / exact numbers — ask to verify via WhatsApp instead of guessing.</li>
+        <li>Send details first — send a short summary and confirm the next step.</li>
+        <li>Not interested.</li>
+      </ul>
+      <div class="appendix-title" style="margin-top:16px;">FAQ closeout</div>
+      <div class="appendix-text">Use the FAQ to keep answers short, move qualified leads forward, and close with the next step instead of a generic ending.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Rupeezy<span style="color:var(--fg-muted); font-weight:400"> · AP Agent</span></div>
+  <div class="footer-copy">Hackathon Submission · Round 1 · Written Solution</div>
+  <div class="footer-ver">v1.0.0</div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(r => observer.observe(r));
+
+const apiBase = window.location.origin.startsWith('http') ? window.location.origin : 'http://127.0.0.1:3000';
+const leadInput = document.getElementById('leadInput');
+const runAnalysisBtn = document.getElementById('runAnalysis');
+const micButton = document.getElementById('micButton');
+const speakButton = document.getElementById('speakButton');
+const backendState = document.getElementById('backendState');
+const analysisLog = document.getElementById('analysisLog');
+const transcriptLog = document.getElementById('transcriptLog');
+const languageValue = document.getElementById('languageValue');
+const languageSub = document.getElementById('languageSub');
+const scoreValue = document.getElementById('scoreValue');
+const scoreSub = document.getElementById('scoreSub');
+const classValue = document.getElementById('classValue');
+const classSub = document.getElementById('classSub');
+const actionValue = document.getElementById('actionValue');
+const actionSub = document.getElementById('actionSub');
+const jumpToDemo = document.getElementById('jumpToDemo');
+
+let lastAnalysis = null;
+
+function setAnalysisLog(lines) {
+  analysisLog.innerHTML = lines.map((line) => `<div class="demo-log-line ${line.className || ''}">${line.text}</div>`).join('');
+}
+
+function setTranscript(lines) {
+  transcriptLog.innerHTML = lines.length
+    ? `<div class="demo-log-title">Conversation memory</div>${lines.map((line) => `<div class="demo-log-line">${line}</div>`).join('')}`
+    : '';
+}
+
+function renderAnalysis(data) {
+  lastAnalysis = data;
+  backendState.textContent = data.knowledgeBase
+    ? `Backend: ${data.backendStatus} · ${data.knowledgeBase}`
+    : `Backend: ${data.backendStatus}`;
+  languageValue.textContent = data.detectedLanguage;
+  languageSub.textContent = `Confidence ${(data.languageConfidence * 100).toFixed(0)}%`;
+  scoreValue.textContent = data.score;
+  scoreSub.textContent = data.scoreReason;
+  classValue.textContent = data.classification;
+  classSub.textContent = data.classificationReason;
+  actionValue.textContent = data.nextAction;
+  actionSub.textContent = data.nextActionDetail;
+  setAnalysisLog([
+    { text: `Lead: ${data.leadText}`, className: 'demo-log-muted' },
+    { text: `Language detected: ${data.detectedLanguage} (${(data.languageConfidence * 100).toFixed(0)}%)`, className: 'demo-log-good' },
+    { text: `Objections: ${data.objections.join(', ') || 'none'}`, className: data.objections.length ? 'demo-log-warn' : 'demo-log-good' },
+    { text: `Assistant reply: ${data.assistantReply}`, className: 'demo-log-good' },
+    { text: `Handoff: ${data.nextAction}`, className: data.classification === 'HOT' ? 'demo-log-good' : 'demo-log-muted' },
+  ]);
+  setTranscript(data.transcript);
+}
+
+async function runAnalysis() {
+  const leadText = leadInput.value.trim();
+  if (!leadText) {
+    setAnalysisLog([{ text: 'Please enter a lead statement first.', className: 'demo-log-bad' }]);
+    return;
+  }
+
+  backendState.textContent = 'Backend: analyzing...';
+  runAnalysisBtn.disabled = true;
+  runAnalysisBtn.textContent = 'Analyzing...';
+
+  try {
+    const response = await fetch(`${apiBase}/api/analyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leadText }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    renderAnalysis(data);
+  } catch (error) {
+    backendState.textContent = 'Backend: offline';
+    setAnalysisLog([{ text: `Could not reach backend: ${error.message}`, className: 'demo-log-bad' }]);
+    setTranscript([]);
+  } finally {
+    runAnalysisBtn.disabled = false;
+    runAnalysisBtn.textContent = 'Run Analysis';
+  }
+}
+
+function speakAnalysis() {
+  if (!lastAnalysis?.assistantReply || !('speechSynthesis' in window)) {
+    return;
+  }
+  const utterance = new SpeechSynthesisUtterance(lastAnalysis.assistantReply);
+  utterance.rate = 0.96;
+  utterance.pitch = 1.02;
+  utterance.lang = lastAnalysis.detectedLanguage === 'Hindi' ? 'hi-IN' : 'en-IN';
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+function startMicCapture() {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Recognition) {
+    backendState.textContent = 'Backend: mic capture is not supported in this browser';
+    return;
+  }
+
+  const recognition = new Recognition();
+  recognition.lang = 'en-IN';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  backendState.textContent = 'Backend: listening...';
+
+  recognition.onresult = (event) => {
+    leadInput.value = event.results[0][0].transcript;
+    backendState.textContent = 'Backend: speech captured';
+    runAnalysis();
+  };
+
+  recognition.onerror = () => {
+    backendState.textContent = 'Backend: mic capture failed';
+  };
+
+  recognition.start();
+}
+
+runAnalysisBtn.addEventListener('click', runAnalysis);
+micButton.addEventListener('click', startMicCapture);
+speakButton.addEventListener('click', speakAnalysis);
+jumpToDemo.addEventListener('click', () => {
+  document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+fetch(`${apiBase}/api/health`)
+  .then((response) => response.json())
+  .then((data) => {
+    backendState.textContent = `Backend: ${data.status} · ${data.version}`;
+  })
+  .catch(() => {
+    backendState.textContent = 'Backend: start the local server to enable analysis';
+  });
+</script>
+
+</body>
+</html>
